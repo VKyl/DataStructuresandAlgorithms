@@ -37,10 +37,12 @@ class ConvexHull:
             return angle, point.distance(base_point)
         self.__points.sort(key=sorting_key)
 
-    @staticmethod
-    def __is_clockwise(vector_start: Point, vector_end: Point, point: Point) -> bool:
-        product = (vector_end.x - vector_start.x) * (point.y - vector_start.y) - (vector_end.y - vector_start.y) * (point.x - vector_start.x)
-        return product <= 0
+    def __find_points(self):
+        for point in self.__points[2:]:
+            while len(self.__surface_points) > 1 and self.__is_clockwise(self.__surface_points[-2],
+                                                                         self.__surface_points[-1], point):
+                self.__surface_points.pop()
+            self.__surface_points.append(point)
 
     def find_hull(self):
         if len(self.__points) < 3:
@@ -50,14 +52,14 @@ class ConvexHull:
         self.__sort_by_angle(lowest_point)
 
         self.__surface_points = [self.__points[0], self.__points[1]]
-
-        for point in self.__points[2:]:
-            while len(self.__surface_points) > 1 and self.__is_clockwise(self.__surface_points[-2],
-                                                                         self.__surface_points[-1], point):
-                self.__surface_points.pop()
-            self.__surface_points.append(point)
-
+        self.__find_points()
         self.__surface_points.append(lowest_point)
+
+    @staticmethod
+    def __is_clockwise(vector_start: Point, vector_end: Point, point: Point) -> bool:
+        product = ((vector_end.x - vector_start.x) * (point.y - vector_start.y)
+                   - (vector_end.y - vector_start.y) * (point.x - vector_start.x))
+        return product <= 0
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(\npoints={self.__points},\nsurface_points={self.__surface_points})"
