@@ -9,6 +9,7 @@ if __name__ == '__main__':
     graphic_manager = GraphicManager()
 
     input6 = list(file_manager.read("input6.txt"))
+    grid = list(file_manager.read("grid6x6.txt"))
     input8 = list(file_manager.read("input8.txt"))
     input40 = list(file_manager.read("input40.txt"))
     input50 = list(file_manager.read("input50.txt"))
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     input100 = list(file_manager.read("input100.txt"))
     input1423 = list(file_manager.read("rs1423.txt"))
 
-    convex_hull.points = input8
+    convex_hull.points = input1423
     convex_hull.find_hull()
     graphic_manager.draw(convex_hull.points, convex_hull.surface_points)
     #

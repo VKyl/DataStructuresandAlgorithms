@@ -19,9 +19,8 @@ class Point:
     def coords(self):
         return self.__x, self.__y
 
-    @property
-    def distance(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2)
+    def distance(self, point: 'Point') -> float:
+        return math.sqrt((self.x- point.x) ** 2 + (self.y - point.y) ** 2)
 
     @property
     def angle(self):

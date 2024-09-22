@@ -1,7 +1,5 @@
 import math
-
 from Point import Point
-from Basis import Basis
 
 
 class ConvexHull:
@@ -33,36 +31,33 @@ class ConvexHull:
     def __lowest_point(self) -> Point:
         return min(self.points, key=lambda point: point.y)
 
-    def __sort_by_angle(self, base_point: Point) -> list[Point]:
-        angles = sorted(self.points, key=lambda point: math.atan2(point.y - base_point.y,
-                                                                  point.x - base_point.x))
-
-        return angles
+    def __sort_by_angle(self, base_point: Point):
+        def sorting_key(point: Point):
+            angle = math.atan2(point.y - base_point.y, point.x - base_point.x)
+            return angle, point.distance(base_point)
+        self.__points.sort(key=sorting_key)
 
     @staticmethod
-    def __is_clockwise(vector, y_basis: Point) -> bool:
-        x_basis: Point = Point(y_basis.y, -1 * y_basis.x) if not (y_basis.x >= 0) ^ (y_basis.y >= 0) \
-            else Point(-1 * y_basis.y, y_basis.x)
-        basis = Basis(x_basis.coords, y_basis.coords)
-        return basis.to_basis(vector.coords)[0] > 0
+    def __is_clockwise(vector_start: Point, vector_end: Point, point: Point) -> bool:
+        product = (vector_end.x - vector_start.x) * (point.y - vector_start.y) - (vector_end.y - vector_start.y) * (point.x - vector_start.x)
+        return product <= 0
 
     def find_hull(self):
+        if len(self.__points) < 3:
+            return
+
         lowest_point = self.__lowest_point()
-        angle_sorted = self.__sort_by_angle(lowest_point)
+        self.__sort_by_angle(lowest_point)
 
-        self.__surface_points = [lowest_point, angle_sorted[1]]
+        self.__surface_points = [self.__points[0], self.__points[1]]
 
-        for point in angle_sorted[2:]:
-            y_basis = self.__surface_points[-1] - self.__surface_points[-2]
-            vector = point - self.__surface_points[-1]
-
-            while self.__is_clockwise(vector, y_basis):
+        for point in self.__points[2:]:
+            while len(self.__surface_points) > 1 and self.__is_clockwise(self.__surface_points[-2],
+                                                                         self.__surface_points[-1], point):
                 self.__surface_points.pop()
-                y_basis = self.__surface_points[-1] - self.__surface_points[-2]
-                vector = point - self.__surface_points[-1]
             self.__surface_points.append(point)
 
-    #TODO перевіряти усі найближчі точки
-    # поки є проти годинника
+        self.__surface_points.append(lowest_point)
+
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(\npoints={self.__points},\nsurface_points={self.__surface_points})"
