@@ -1,6 +1,13 @@
 from GraphicManager import GraphicManager
 from FileManager import FileManager
-from ConvexHull import ConvexHull
+from ConvexHull import ConvexHull, Point
+
+
+def test(test_case: list[Point], hull: ConvexHull, graphic: GraphicManager):
+    hull.clear()
+    hull.points = test_case
+    hull.find_hull()
+    graphic.draw(hull.points, hull.surface_points)
 
 
 if __name__ == '__main__':
@@ -17,8 +24,7 @@ if __name__ == '__main__':
     input100 = list(file_manager.read("input100.txt"))
     input1423 = list(file_manager.read("rs1423.txt"))
 
-    convex_hull.points = input1423
-    convex_hull.find_hull()
-    graphic_manager.draw(convex_hull.points, convex_hull.surface_points)
-    #
-    # test_cases = [input6, input8, input40, input50, input56, input100, input1423]
+    test_cases = [input6, input8, input40, input50, input56, input100, input1423]
+
+    for test_case in test_cases:
+        test(test_case, convex_hull, graphic_manager)

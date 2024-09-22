@@ -1,5 +1,7 @@
 import math
 from Point import Point
+from Basis import Basis
+import matplotlib as mt
 
 
 class ConvexHull:
@@ -57,9 +59,13 @@ class ConvexHull:
 
     @staticmethod
     def __is_clockwise(vector_start: Point, vector_end: Point, point: Point) -> bool:
-        product = ((vector_end.x - vector_start.x) * (point.y - vector_start.y)
-                   - (vector_end.y - vector_start.y) * (point.x - vector_start.x))
-        return product <= 0
+        y_basis = vector_end - vector_start
+        x_basis = Point(-y_basis.y, y_basis.x)
+        basis = Basis(x_basis.coords, y_basis.coords)
+
+        vector = point - vector_end
+        new_vector = basis.to_basis(vector.coords)
+        return new_vector[0] <= 0
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(\npoints={self.__points},\nsurface_points={self.__surface_points})"
