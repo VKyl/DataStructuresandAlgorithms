@@ -170,7 +170,7 @@ if __name__ == "__main__":
         vx = random.randint(1, 20)
         vy = random.randint(1, 20)
         mass = random.random()
-        radius = random.randint(3,5)
+        radius = random.randint(5,10)
         print(f"Creating a new Particle({x}, {y}, {vx}, {vy}, {radius}, {mass})")
         balls.append(Particle(x, y, vx, vy, radius, mass, ax))
 
