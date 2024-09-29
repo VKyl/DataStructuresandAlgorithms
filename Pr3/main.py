@@ -24,7 +24,7 @@ if __name__ == '__main__':
     input100 = list(file_manager.read("input100.txt"))
     input1423 = list(file_manager.read("rs1423.txt"))
 
-    test_cases = [input6, input8, input40, input50, input56, input100, input1423]
+    test_cases = [input6, grid, input8, input40, input50, input56, input100, input1423]
 
     for test_case in test_cases:
         test(test_case, convex_hull, graphic_manager)
