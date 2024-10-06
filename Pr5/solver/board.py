@@ -34,14 +34,6 @@ class Board:
     def is_goal(self) -> bool:
         return not self.hamming()
 
-    def __eq__(self, other: 'Board') -> bool:
-        if other is None:
-            return False
-        return self._blocks == other.blocks
-
-    def __lt__(self, other):
-        return self.manhattan() + self.hamming() < other.manhattan() + other.hamming()
-
     def neighbors(self) -> list['Board']:
         neighbors_list = []
         zero_index = self._blocks.index(0)
@@ -61,6 +53,16 @@ class Board:
 
         return neighbors_list
 
+    def __eq__(self, other: 'Board') -> bool:
+        if other is None:
+            return False
+        return self._blocks == other.blocks
+
+    def __lt__(self, other):
+        if self == other and self.hamming() != other.hamming():
+            return self.hamming() < other.hamming()
+        return self.manhattan() + self.hamming() < other.manhattan() + other.hamming()
+
     def __str__(self) -> str:
         res = ""
         for index, block in enumerate(self._blocks):
@@ -72,7 +74,7 @@ class Board:
 
 
 if __name__ == '__main__':
-    board = Board(3, [ 1, 2, 3,
+    board = Board(3, [1, 2, 3,
                                        4, 5, 6,
                                        7, 8, 0])
     print(board.hamming())

@@ -1,3 +1,4 @@
+
 from board import Board
 import heapq
 
@@ -6,9 +7,16 @@ class Solver:
     def __init__(self, board):
         self._initial_board: Board = board
 
-    def is_solvable(self) -> bool:
-        # check if board is solvable
-        pass
+    def is_solvable(self):
+        blocks: list[int] = self._initial_board.blocks.copy()
+
+        inversions = 0
+        for i in range(len(blocks)):
+            for j in range(i + 1, len(blocks)):
+                if blocks[i] and blocks[j] and blocks[i] > blocks[j]:
+                    inversions += 1
+
+        return not inversions % 2
 
     def moves(self) -> int:
         moves = len(self.solution()) - 1
@@ -16,9 +24,9 @@ class Solver:
 
     @staticmethod
     def _solve(min_pq, current_board):
-        visited = set()
+        visited = []
         came_from = {current_board: None}
-        visited.add(current_board)
+        visited.append(current_board)
 
         while not current_board.is_goal():
             options = current_board.neighbors()
@@ -26,7 +34,7 @@ class Solver:
             for option in options:
                 if option not in visited:
                     heapq.heappush(min_pq, option)
-                    visited.add(option)
+                    visited.append(option)
                     came_from[option] = current_board
 
             current_board = heapq.heappop(min_pq)
@@ -46,20 +54,23 @@ class Solver:
 
 
 def read_board_data(path) -> tuple[int, list[int]]:
-    with open(path, 'r') as file:
-        dimensions = int(file.readline())
-        board = []
-        for line in file.readlines():
-            board.extend(map(int, line.split()))
-    return dimensions, board
+    try:
+        with open(path, 'r') as file:
+            dimensions = int(file.readline())
+            board = []
+            for line in file.readlines():
+                board.extend(map(int, line.split()))
+        return dimensions, board
+    except FileNotFoundError:
+        print('File not found')
 
 
 def main():
-    data = read_board_data('./PazlTestFiles/puzzle31.txt')
+    data = read_board_data('./PazlTestFiles/puzzle3x3-unsolvable.txt')
     board = Board(*data)
     solver = Solver(board)
 
-    if solver.is_solvable():
+    if not solver.is_solvable():
         print("Board does not have solutions")
     else:
         print(f"Minimal number of steps {solver.moves()}")
