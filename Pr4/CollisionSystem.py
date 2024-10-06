@@ -58,7 +58,6 @@ class CollisionSystem:
         scatters = []
         while self._events:
             event = heapq.heappop(self._events)
-            print(event.time)
             a: Particle = event.a
             b: Particle = event.b
             if event.is_valid and event.time <= self._sim_time:
@@ -78,8 +77,7 @@ def animate(collision_system: CollisionSystem, dt, _t):
 
     return scatters
 
-
-if __name__ == "__main__":
+def main():
     # 10 milliseconds delta t
     delta_t = 30
     n_balls = 5
@@ -102,3 +100,10 @@ if __name__ == "__main__":
     )
 
     plt.show()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        quit(0)

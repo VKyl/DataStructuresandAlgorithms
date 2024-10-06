@@ -26,6 +26,7 @@ class Event:
     @property
     def is_valid(self):
         return (self.time != math.inf and self.time != -math.inf) and not (self.a.collisions_count or self.b.collisions_count)
+        
 
 
     def __lt__(self, that: 'Event'):

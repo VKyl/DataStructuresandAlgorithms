@@ -36,7 +36,7 @@ ax = fig.add_subplot(111, autoscale_on=False, xlim=x_lim, ylim=y_lim)
 ax.set_yticks([])
 ax.set_xticks([])
 
-MAX_SPEED = 20
+MAX_SPEED = 10
 class Particle:
     def __init__(self, rx, ry, vx, vy, radius, mass, ax):
         self._rx = rx
@@ -59,18 +59,22 @@ class Particle:
 
     @property
     def vx(self):
+        self._vx = min(self._vx, MAX_SPEED) if self._vx >= 0 else max(self._vx, -MAX_SPEED)
         return self._vx
 
     @property
     def vy(self):
+        self._vy = min(self._vy, MAX_SPEED) if self._vy >= 0 else max(self._vy, -MAX_SPEED)
         return self._vy
 
     @vx.setter
     def vx(self, value):
+        self._vx = min(self._vx, MAX_SPEED) if self._vx >= 0 else max(self._vx, -MAX_SPEED)
         self._vx = value
 
     @vy.setter
     def vy(self, value):
+        self._vy = min(self._vy, MAX_SPEED) if self._vy >= 0 else max(self._vy, -MAX_SPEED)
         self._vy = value
 
     @property
@@ -100,8 +104,8 @@ class Particle:
         if (self._ry + self._vy * dt < y_lim[0] + self._radius) or \
                 (self._ry + self._vy * dt > y_lim[1] - self._radius):
             self._vy = -self._vy
-        self._vx = min(self._vx, MAX_SPEED)
-        self._vy = min(self._vy, MAX_SPEED)
+        self._vx = min(self._vx, MAX_SPEED) if self._vx >= 0 else max(self._vx, -MAX_SPEED)
+        self._vy = min(self._vy, MAX_SPEED)if self._vy >= 0 else max(self._vy, -MAX_SPEED)
 
         self._rx = self._rx + self._vx * dt
         self._ry = self._ry + self._vy * dt
@@ -121,8 +125,6 @@ class Particle:
         self.vy += j_y / self.mass
         that.vx -= j_x / that.mass
         that.vy -= j_y / that.mass
-        self.vx, self.vy = min(self.vx, MAX_SPEED), min(self.vy, MAX_SPEED)
-        that.vx, that.vy = min(that.vx, MAX_SPEED), min(that.vy, MAX_SPEED)
         self.collisions_count += 1
         that.collisions_count += 1
 
@@ -157,9 +159,7 @@ def animate(objects, dt, _t):
 
     return [obj.scatter for obj in objects]
 
-
-if __name__ == "__main__":
-    # 10 milliseconds delta t
+def main():
     delta_t = 30
     n_balls = 5
     balls = []
@@ -170,7 +170,7 @@ if __name__ == "__main__":
         vx = random.randint(1, 20)
         vy = random.randint(1, 20)
         mass = random.random()
-        radius = random.randint(5,10)
+        radius = random.randint(5, 10)
         print(f"Creating a new Particle({x}, {y}, {vx}, {vy}, {radius}, {mass})")
         balls.append(Particle(x, y, vx, vy, radius, mass, ax))
 
@@ -179,3 +179,9 @@ if __name__ == "__main__":
     )
 
     plt.show()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        quit(0)
