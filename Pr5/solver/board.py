@@ -2,30 +2,83 @@ class Board:
     def __init__(self, dimension, blocks) -> None:
         self._dimension = dimension
         self._blocks = blocks
+    # blocks = [0,1,2,
+    #           3,4,5,
+    #           6,7,8]
+
+    @property
+    def blocks(self):
+        return self._blocks
 
     def dimension(self) -> int:
         return self._dimension
 
     def hamming(self) -> int:
-        # hamming distance
-        pass
+        counter = 0
+        for index, block in enumerate(self._blocks):
+            if block and (index + 1) != block:
+                counter += 1
+        return counter
 
     def manhattan(self) -> int:
-        # manhattan distance
-        pass
+        distance = 0
+        for index, block in enumerate(self._blocks):
+            if block:
+                row = index // self._dimension
+                col = index % self._dimension
+                desired_row = (block - 1) // self._dimension
+                desired_col = (block - 1) % self._dimension
+                distance += abs(desired_row - row) + abs(desired_col - col)
+        return distance
 
     def is_goal(self) -> bool:
-        # check if this board is solution
-        pass
+        return not self.hamming()
 
-    def __eq__(self, other) -> bool:
-        # check that this board is equal to other
-        pass
+    def __eq__(self, other: 'Board') -> bool:
+        if other is None:
+            return False
+        return self._blocks == other.blocks
 
-    def neighbors(self) -> list:
-        # should return list of neighbor boards
-        pass
+    def __lt__(self, other):
+        return self.manhattan() + self.hamming() < other.manhattan() + other.hamming()
+
+    def neighbors(self) -> list['Board']:
+        neighbors_list = []
+        zero_index = self._blocks.index(0)
+        row = zero_index // self._dimension
+        col = zero_index % self._dimension
+        moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for dx, dy in moves:
+            new_row = dxrow if 0 <= (dxrow := row + dx) < self._dimension else row
+            new_col = dyrow if 0 <= (dyrow := col + dy) < self._dimension else col
+            if new_row != row or new_col != col:
+                new_blocks = self._blocks.copy()
+                new_index = new_row * self._dimension + new_col
+                new_blocks[new_index], new_blocks[zero_index] = (new_blocks[zero_index], new_blocks[new_index])
+                neighbor = Board(self._dimension, new_blocks)
+                neighbors_list.append(neighbor)
+
+        return neighbors_list
 
     def __str__(self) -> str:
-        # string representation
-        pass
+        res = ""
+        for index, block in enumerate(self._blocks):
+            res += f'{block} ' if index % self._dimension != 2 else f'{block}\n'
+        return res
+
+    def __hash__(self) -> int:
+        return hash(tuple(self._blocks))
+
+
+if __name__ == '__main__':
+    board = Board(3, [ 1, 2, 3,
+                                       4, 5, 6,
+                                       7, 8, 0])
+    print(board.hamming())
+    print(board.manhattan())
+    print(board.is_goal())
+    neighbors = board.neighbors()
+    print(board)
+    for neighbor in neighbors:
+        print(neighbor)
