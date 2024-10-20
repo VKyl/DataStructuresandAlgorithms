@@ -66,13 +66,14 @@ def read_board_data(path) -> tuple[int, list[int]]:
 
 
 def main():
-    data = read_board_data('./PazlTestFiles/puzzle3x3-unsolvable.txt')
+    data = read_board_data('./PazlTestFiles/puzzle31.txt')
     board = Board(*data)
     solver = Solver(board)
 
     if not solver.is_solvable():
         print("Board does not have solutions")
     else:
+        "".sta
         print(f"Minimal number of steps {solver.moves()}")
         for board in solver.solution():
             print(board)
