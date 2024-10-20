@@ -46,6 +46,7 @@ class Maze:
             row = list(self.__copy_row(self.__maze[-1], row_index))
             self.__remove_right(row)
             self.__place_right(row)
+            self.__place_bottom(row, row_index)
             self.__maze.append(row)
 
     def __generate_borders(self):
