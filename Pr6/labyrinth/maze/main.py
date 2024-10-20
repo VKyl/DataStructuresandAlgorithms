@@ -33,7 +33,6 @@ def bfs_solve(maze):
     print(bfs.path_to(end))
 
 
-
 if __name__ == '__main__':
     maze = Maze(3, 3)
     print(maze)
