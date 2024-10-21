@@ -73,7 +73,7 @@ class Maze:
             if self.__set.find(row[i]) == self.__set.find(row[i+1]):
                 row[i].close(1)
                 continue
-            if random.choice([False, True]):
+            if random.choice([False, False, False, True]):
                 row[i].close(1)
             else:
                 self.__set.union(row[i], row[i+1])

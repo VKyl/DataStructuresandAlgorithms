@@ -63,8 +63,9 @@ def draw_grid(maze: Maze):
     ax.axis('off')
     plt.show()
 
+
 if __name__ == '__main__':
-    maze = Maze(10, 10)
+    maze = Maze(20, 20)
     print(maze)
     draw_grid(maze)
     dfs_solve(maze)
