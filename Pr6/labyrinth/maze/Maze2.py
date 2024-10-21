@@ -73,7 +73,7 @@ class Maze:
             if self.__set.find(row[i]) == self.__set.find(row[i+1]):
                 row[i].close(1)
                 continue
-            if random.choice([True, False]):
+            if random.choice([False, True]):
                 row[i].close(1)
             else:
                 self.__set.union(row[i], row[i+1])
@@ -81,7 +81,7 @@ class Maze:
     def __place_bottom(self, row: list[Cell], row_index: int):
         for i in range(self.x_size):
             cell = row[i]
-            if random.choice([True, False]):
+            if random.choice([False, True, True, True]):
                 cell.close(2)
             if not self.__set.has_open_bottom(cell, row_index):
                 cell.open(2)
