@@ -65,7 +65,7 @@ def draw_grid(maze: Maze):
 
 
 if __name__ == '__main__':
-    maze = Maze(20, 20)
+    maze = Maze(50, 50)
     print(maze)
     draw_grid(maze)
     dfs_solve(maze)

@@ -15,3 +15,6 @@ Repository with DS and Algoritms HW
 <img src="./Pr6/labyrinth/results/maze.png" width=500>
 <img src="./Pr6/labyrinth/results/maze2.png" width=500>
 <img src="./Pr6/labyrinth/results/maze3.png" width=500>
+<img src="./Pr6/labyrinth/results/maze4.png" width=500>
+<img src="./Pr6/labyrinth/results/maze5.png" width=500>
+
